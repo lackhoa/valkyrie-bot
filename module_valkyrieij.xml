@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_valkyrieij" default="compile.module.valkyrieij">
+  <dirname property="module.valkyrieij.basedir" file="${ant.file.module_valkyrieij}"/>
+  
+  <property name="module.jdk.home.valkyrieij" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.valkyrieij" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.valkyrieij" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.valkyrieij" value="-encoding UTF-8 -source 1.7 -target 1.7 ${compiler.args}"/>
+  
+  <property name="valkyrieij.output.dir" value="${module.valkyrieij.basedir}/out/production/ValkyrieIJ"/>
+  <property name="valkyrieij.testoutput.dir" value="${module.valkyrieij.basedir}/out/test/ValkyrieIJ"/>
+  
+  <path id="valkyrieij.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="valkyrieij.module.production.classpath">
+    <path refid="${module.jdk.classpath.valkyrieij}"/>
+    <path refid="library.bwmirror_v2_4.classpath"/>
+  </path>
+  
+  <path id="valkyrieij.runtime.production.module.classpath">
+    <pathelement location="${valkyrieij.output.dir}"/>
+    <path refid="library.bwmirror_v2_4.classpath"/>
+  </path>
+  
+  <path id="valkyrieij.module.classpath">
+    <path refid="${module.jdk.classpath.valkyrieij}"/>
+    <pathelement location="${valkyrieij.output.dir}"/>
+    <path refid="library.bwmirror_v2_4.classpath"/>
+  </path>
+  
+  <path id="valkyrieij.runtime.module.classpath">
+    <pathelement location="${valkyrieij.testoutput.dir}"/>
+    <pathelement location="${valkyrieij.output.dir}"/>
+    <path refid="library.bwmirror_v2_4.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.valkyrieij">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.valkyrieij">
+    <patternset refid="excluded.from.module.valkyrieij"/>
+  </patternset>
+  
+  <path id="valkyrieij.module.sourcepath">
+    <dirset dir="${module.valkyrieij.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.valkyrieij" depends="compile.module.valkyrieij.production,compile.module.valkyrieij.tests" description="Compile module ValkyrieIJ"/>
+  
+  <target name="compile.module.valkyrieij.production" depends="register.custom.compilers" description="Compile module ValkyrieIJ; production classes">
+    <mkdir dir="${valkyrieij.output.dir}"/>
+    <javac2 destdir="${valkyrieij.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.valkyrieij}/javac">
+      <compilerarg line="${compiler.args.valkyrieij}"/>
+      <bootclasspath refid="valkyrieij.module.bootclasspath"/>
+      <classpath refid="valkyrieij.module.production.classpath"/>
+      <src refid="valkyrieij.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.valkyrieij"/>
+    </javac2>
+    
+    <copy todir="${valkyrieij.output.dir}">
+      <fileset dir="${module.valkyrieij.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.valkyrieij.tests" depends="register.custom.compilers,compile.module.valkyrieij.production" description="compile module ValkyrieIJ; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.valkyrieij" description="cleanup module">
+    <delete dir="${valkyrieij.output.dir}"/>
+    <delete dir="${valkyrieij.testoutput.dir}"/>
+  </target>
+</project>

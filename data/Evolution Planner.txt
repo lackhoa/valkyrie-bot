@@ -1,0 +1,3 @@
+State: 2
+Plan 1 efficiency score: 0.3904002357578325
+Plan 2 efficiency score:0.41415124959428756
