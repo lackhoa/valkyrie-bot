@@ -86,7 +86,8 @@ public class EvolutionPlanner implements Serializable {
         Plan newPlan = new Plan(plan);
         // For every 100 signals, there is an error:
         String[] signalList;
-        signalList = newPlan.getSignalList().toArray(new String[0]);
+        int size = newPlan.getSignalList().size();
+        signalList = newPlan.getSignalList().toArray(new String[size]);
         int maxValue = signalList.length - 1;
         int top = 100;
         while (top < maxValue)
